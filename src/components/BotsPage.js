@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from "react";
 import YourBotArmy from "./YourBotArmy";
 import BotCollection from "./BotCollection";
+import BotSpecs from "./BotSpecs";
 
 function BotsPage() {
   //start here with your code for step one
   const [bots, setBots] = useState([])
   const [botArmy, setBotArmy] = useState([])
+
+  const [fullView, setFullView] = useState([{}, false])
 
   useEffect(() => {
     fetch('http://localhost:8002/bots')
@@ -15,11 +18,15 @@ function BotsPage() {
       setBots(arr)})
   }, [])
   
-  function yourRecruitHandler(id) {
-    setBotArmy(botArmy.filter(bot => (bot !== id)))
+  function yourRecruitHandler(recruit) {
+    setBotArmy(botArmy.filter(bot => (bot !== recruit.id)))
   }
 
-  function recruitHandler(id) {
+  function recruitHandler(bot = {}) {
+    setFullView([bot, !fullView[1]])
+  }
+
+  function addBot(id){
     for (const i of botArmy) {
       if (i === id) return console.log("Can't hire the same bot twice!"
       )
@@ -46,7 +53,7 @@ function BotsPage() {
   return (
     <div>
       <YourBotArmy filteredBots={filteredBots} yourRecruitHandler={yourRecruitHandler} />
-      <BotCollection bots={bots} recruitHandler={recruitHandler} dismissHandler={dismissHandler} />
+      {fullView[1] ? <BotSpecs bot={fullView[0]} addBot={addBot} goBack={recruitHandler} /> : <BotCollection bots={bots} recruitHandler={recruitHandler} dismissHandler={dismissHandler} />}
     </div>
   )
 }

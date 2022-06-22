@@ -15,7 +15,7 @@ function BotCard({ bot, recruitHandler, dismissHandler}) {
       <div
         className="ui card"
         key={bot.id}
-        onClick={() => recruitHandler(bot.id)}
+        onClick={() => recruitHandler(bot)}
       >
         <div className="image">
           <img alt="oh no!" src={bot.avatar_url} />
