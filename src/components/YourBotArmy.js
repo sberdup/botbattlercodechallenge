@@ -5,7 +5,7 @@ function YourBotArmy({filteredBots, yourRecruitHandler}) {
   //your bot army code here...
   
   const botGrid = filteredBots.map(bot => (
-    <BotCard key={bot.id} bot={bot} recruitHandler={yourRecruitHandler}/>
+    <BotCard key={bot.id} bot={bot} recruitHandler={yourRecruitHandler} />
   ))
   return (
     <div className="ui segment inverted olive bot-army">

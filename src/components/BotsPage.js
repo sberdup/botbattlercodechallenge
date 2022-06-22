@@ -32,7 +32,7 @@ function BotsPage() {
     fetch(`http://localhost:8002/bots/${id}`, {method:'DELETE'})
     .then(() => {
       console.log(`You dismissed bot #${id}`)
-      setBots(bots.filter(bot => (bot !== id)))
+      setBots(bots.filter(bot => (bot.id !== id)))
     })
   }
 
@@ -45,8 +45,8 @@ function BotsPage() {
 
   return (
     <div>
-      <YourBotArmy filteredBots={filteredBots} yourRecruitHandler={yourRecruitHandler}/>
-      <BotCollection bots={bots} recruitHandler={recruitHandler} dismissHandler={dismissHandler}/>
+      <YourBotArmy filteredBots={filteredBots} yourRecruitHandler={yourRecruitHandler} />
+      <BotCollection bots={bots} recruitHandler={recruitHandler} dismissHandler={dismissHandler} />
     </div>
   )
 }
