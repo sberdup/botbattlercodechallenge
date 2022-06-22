@@ -9,13 +9,13 @@ const botTypeClasses = {
   Captain: "icon star",
 };
 
-function BotCard({ bot }) {
+function BotCard({ bot, recruitHandler, dismissHandler}) {
   return (
     <div className="ui column">
       <div
         className="ui card"
         key={bot.id}
-        onClick={() => console.log("add code to connect event listener")}
+        onClick={() => recruitHandler(bot.id)}
       >
         <div className="image">
           <img alt="oh no!" src={bot.avatar_url} />
@@ -43,18 +43,21 @@ function BotCard({ bot }) {
             <i className="icon shield" />
             {bot.armor}
           </span>
-          <span>
+          {/* adding ternary expression to get rid of X button if the component is displayed with no dismiss handler */}
+          {!dismissHandler ? null : <span>
             <div className="ui center aligned segment basic">
               <button
                 className="ui mini red button"
-                onClick={() =>
-                  console.log("add code to connect event listener")
-                }
+                onClick={(e) => {
+                  // stop the click from going through the button and onto the card
+                  e.stopPropagation()
+                  dismissHandler(bot.id)
+                }}
               >
                 x
               </button>
             </div>
-          </span>
+          </span>}
         </div>
       </div>
     </div>
