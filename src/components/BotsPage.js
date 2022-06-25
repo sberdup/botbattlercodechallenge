@@ -37,7 +37,8 @@ function BotsPage() {
   
   //this function works when a bot in YourBotArmy is clicked to remove the bot from the botArmy state variable
   function yourRecruitHandler(recruit) {
-    setBotArmy(botArmy.filter(bot => (bot !== recruit.id)))
+    setBotArmy(botArmy.filter(bot => (bot.id !== recruit.id)))
+    setBots([...bots, recruit])
   }
 
   //this passes in a selected bot from the collection and flips the boolean controlling whether to display Specs or Collection
@@ -47,13 +48,14 @@ function BotsPage() {
   }
 
 // this will be called from the enlist button to add the chosen bot to the list of ids in botArmy state
-  function addBot(id){
+  function addBot(bot){
     for (const i of botArmy) {
-      if (i === id) return console.log("Can't hire the same bot twice!"
+      if (i.id === bot.id) return console.log("Can't hire the same bot twice!"
       )
     }
-    console.log(`You recruited bot #${id}`)
-    setBotArmy([...botArmy, id])
+    console.log(`You recruited bot #${bot}`)
+    setBotArmy([...botArmy, bot])
+    setBots(bots.filter(item => (item.id !== bot.id)))
   }
 
 //this passes a delete request and eliminated the bots from state and the backend
@@ -66,16 +68,16 @@ function BotsPage() {
   }
 
 //this is how YourBotArmy selects which bots out of the collection to display
-  const filteredBots = bots.filter(bot => {
-    for (const i of botArmy) {
-      if (i === bot.id) return true
-    }
-    return false
-  })
+  // const filteredBots = bots.filter(bot => {
+  //   for (const i of botArmy) {
+  //     if (i === bot.id) return true
+  //   }
+  //   return false
+  // })
 
   return (
     <div>
-      <YourBotArmy filteredBots={filteredBots} yourRecruitHandler={yourRecruitHandler} />
+      <YourBotArmy botArmy={botArmy} yourRecruitHandler={yourRecruitHandler} />
       {fullView[1] ? null : <SortBar setFilterKey={setFilterKey}/>}
       {fullView[1] ? <BotSpecs bot={fullView[0]} addBot={addBot} goBack={recruitHandler} /> : <BotCollection bots={sortedBots()} recruitHandler={recruitHandler} dismissHandler={dismissHandler} />}
     </div>

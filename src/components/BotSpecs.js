@@ -59,7 +59,7 @@ function BotSpecs({ bot, addBot, goBack }) {
             <button
               className="ui button fluid"
               onClick={() => {
-                addBot(bot.id)
+                addBot(bot)
                 goBack()
               }}
             >
