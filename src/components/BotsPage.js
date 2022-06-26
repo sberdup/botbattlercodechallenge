@@ -13,18 +13,35 @@ function BotsPage() {
 
   const [filterKey, setFilterKey] = useState([])
 
+  const [classArr, setClassArr] = useState(['Support', 'Medic', 'Assault', 'Defender', 'Captain', 'Witch'])
+
   //anonymous function to use the filterKey state set with SortBar and return a sorted list based on selected key
   const sortedBots = () => {
-    if (filterKey === []) return bots
+    if (filterKey === []) return selectedBots
 
     const [key, direction] = filterKey
     if (direction === true) {
-      return bots.sort((a, b) => a[key] - b[key])
+      return selectedBots.sort((a, b) => a[key] - b[key])
     }
     else {
-      return bots.sort((a, b) => b[key] - a[key])
+      return selectedBots.sort((a, b) => b[key] - a[key])
     }
   }
+
+  //callback function to handle adding classes to display
+  function classBots(botClass, isSelected) {
+    if (isSelected) {
+      setClassArr([...classArr, botClass])
+    } else {
+      setClassArr(classArr.filter(cls => cls !== botClass))
+    }
+  }
+
+  //this will reduce the bots list down to just the selected classes before passing into the sort function
+  const selectedBots = bots.filter((bot) => {
+    if (classArr === []) return true
+    return !!classArr.find(cls => cls === bot.bot_class)
+  })
 
   // initial fetch when page loads
   useEffect(() => {
@@ -50,10 +67,10 @@ function BotsPage() {
 // this will be called from the enlist button to add the chosen bot to the list of ids in botArmy state
   function addBot(bot){
     for (const i of botArmy) {
-      if (i.id === bot.id) return console.log("Can't hire the same bot twice!"
-      )
+      if (i.id === bot.id) return console.log("Can't hire the same bot twice!")
+      if (i.bot_class === bot.bot_class) return alert("Can't hire two of the same class bot!")
     }
-    console.log(`You recruited bot #${bot}`)
+    console.log(bot)
     setBotArmy([...botArmy, bot])
     setBots(bots.filter(item => (item.id !== bot.id)))
   }
@@ -78,7 +95,7 @@ function BotsPage() {
   return (
     <div>
       <YourBotArmy botArmy={botArmy} yourRecruitHandler={yourRecruitHandler} />
-      {fullView[1] ? null : <SortBar setFilterKey={setFilterKey}/>}
+      {<SortBar setFilterKey={setFilterKey} classBots={classBots} displayProp={fullView[1]}/>}
       {fullView[1] ? <BotSpecs bot={fullView[0]} addBot={addBot} goBack={recruitHandler} /> : <BotCollection bots={sortedBots()} recruitHandler={recruitHandler} dismissHandler={dismissHandler} />}
     </div>
   )
